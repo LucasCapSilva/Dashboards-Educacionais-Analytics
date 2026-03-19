@@ -1,8 +1,8 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Modal } from '../../components/ui/Modal';
 import { useDataStore } from '../../store/dataStore';
-import type { StudentStatus } from '../../mockData';
+import type { StudentStatus, Student, Course } from '../../mockData';
 import { Search, Filter, MoreHorizontal, CheckCircle2, XCircle, Clock, Download, Plus, Mail, BookOpen, GraduationCap, Activity } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 import { cn } from '../../utils/cn';
@@ -19,37 +19,27 @@ export default function Students() {
 
   // Modals state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
   // Form state
   const [newStudent, setNewStudent] = useState({ name: '', email: '', courseId: '', status: 'ativo' as StudentStatus });
 
-  // Handle global search
-  useEffect(() => {
-    if (globalSearchTerm) {
-      setSearchTerm(globalSearchTerm);
-      setGlobalSearchTerm('');
-    }
-  }, [globalSearchTerm, setGlobalSearchTerm]);
+  const effectiveSearchTerm = globalSearchTerm || searchTerm;
 
   const filteredStudents = useMemo(() => {
     return students.filter(student => {
-      const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            student.email.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = student.name.toLowerCase().includes(effectiveSearchTerm.toLowerCase()) || 
+                            student.email.toLowerCase().includes(effectiveSearchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'all' || student.status === statusFilter;
       const matchesCourse = courseFilter === 'all' || student.courseId === courseFilter;
       
       return matchesSearch && matchesStatus && matchesCourse;
     });
-  }, [students, searchTerm, statusFilter, courseFilter]);
-
-  // Reset to page 1 when filters change
-  useMemo(() => {
-    setCurrentPage(1);
-  }, [searchTerm, statusFilter, courseFilter]);
+  }, [students, effectiveSearchTerm, statusFilter, courseFilter]);
 
   const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
-  const currentStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const safeCurrentPage = Math.min(currentPage, Math.max(totalPages, 1));
+  const currentStudents = filteredStudents.slice((safeCurrentPage - 1) * itemsPerPage, safeCurrentPage * itemsPerPage);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -76,7 +66,7 @@ export default function Students() {
     }
   };
 
-  const getCourseName = (id: string) => courses.find((c: any) => c.id === id)?.name || 'Desconhecido';
+  const getCourseName = (id: string) => courses.find((c: Course) => c.id === id)?.name || 'Desconhecido';
 
   const handleExportCSV = () => {
     const headers = ['Nome', 'E-mail', 'Curso', 'Status', 'Progresso (%)', 'Engajamento', 'Último Login'];
@@ -119,17 +109,17 @@ export default function Students() {
           <p className="text-gray-500 dark:text-gray-400 mt-1">Acompanhe o desempenho, presença e engajamento dos alunos.</p>
         </div>
         
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
           <button 
             onClick={handleExportCSV}
-            className="px-4 py-2 bg-white dark:bg-[#1a1c23] border border-gray-200 dark:border-gray-800 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm flex items-center gap-2"
+            className="px-4 py-2 bg-white dark:bg-[#1a1c23] border border-gray-200 dark:border-gray-800 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             <Download className="w-4 h-4" />
             Exportar CSV
           </button>
           <button 
             onClick={() => setIsAddModalOpen(true)}
-            className="px-4 py-2 text-white rounded-lg text-sm font-medium transition-colors shadow-sm hover:opacity-90 flex items-center gap-2"
+            className="px-4 py-2 text-white rounded-lg text-sm font-medium transition-colors shadow-sm hover:opacity-90 flex items-center justify-center gap-2 w-full sm:w-auto"
             style={{ backgroundColor: colors[500] }}
           >
             <Plus className="w-4 h-4" />
@@ -145,20 +135,29 @@ export default function Students() {
             <input 
               type="text" 
               placeholder="Buscar por nome ou e-mail..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={effectiveSearchTerm}
+              onChange={(e) => {
+                if (globalSearchTerm) {
+                  setGlobalSearchTerm('');
+                }
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
               className="w-full pl-9 pr-4 py-2 bg-white dark:bg-[#12141a] border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent dark:text-white dark:placeholder-gray-500"
               style={{ '--tw-ring-color': colors[500] } as React.CSSProperties}
             />
           </div>
           
-          <div className="flex gap-4">
-            <div className="relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full md:w-auto">
+            <div className="relative w-full">
               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
               <select 
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="pl-9 pr-8 py-2 bg-white dark:bg-[#12141a] border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent appearance-none dark:text-white"
+                onChange={(e) => {
+                  setStatusFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="pl-9 pr-8 py-2 w-full bg-white dark:bg-[#12141a] border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent appearance-none dark:text-white"
                 style={{ '--tw-ring-color': colors[500] } as React.CSSProperties}
               >
                 <option value="all">Todos os Status</option>
@@ -168,16 +167,19 @@ export default function Students() {
               </select>
             </div>
             
-            <div className="relative">
+            <div className="relative w-full">
               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
               <select 
                 value={courseFilter}
-                onChange={(e) => setCourseFilter(e.target.value)}
-                className="pl-9 pr-8 py-2 bg-white dark:bg-[#12141a] border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent appearance-none dark:text-white max-w-[200px] truncate"
+                onChange={(e) => {
+                  setCourseFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="pl-9 pr-8 py-2 w-full md:max-w-[220px] bg-white dark:bg-[#12141a] border border-gray-300 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent appearance-none dark:text-white truncate"
                 style={{ '--tw-ring-color': colors[500] } as React.CSSProperties}
               >
                 <option value="all">Todos os Cursos</option>
-                {courses.map((course: any) => (
+                {courses.map((course: Course) => (
                   <option key={course.id} value={course.id}>{course.name}</option>
                 ))}
               </select>
@@ -186,7 +188,7 @@ export default function Students() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[860px] text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 dark:bg-[#1a1c23] border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
                 <th className="px-6 py-4 font-medium">Aluno</th>
@@ -267,28 +269,28 @@ export default function Students() {
         </div>
         
         {/* Pagination placeholder */}
-        <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-800/60 flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-800/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <span className="text-sm text-gray-500 dark:text-gray-400">
             {filteredStudents.length === 0 ? (
               <>Nenhum aluno encontrado</>
             ) : (
               <>
-                Mostrando <span className="font-medium text-gray-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-medium text-gray-900 dark:text-white">{Math.min(currentPage * itemsPerPage, filteredStudents.length)}</span> de <span className="font-medium text-gray-900 dark:text-white">{filteredStudents.length}</span> alunos
+                Mostrando <span className="font-medium text-gray-900 dark:text-white">{(safeCurrentPage - 1) * itemsPerPage + 1}</span> a <span className="font-medium text-gray-900 dark:text-white">{Math.min(safeCurrentPage * itemsPerPage, filteredStudents.length)}</span> de <span className="font-medium text-gray-900 dark:text-white">{filteredStudents.length}</span> alunos
               </>
             )}
           </span>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <button 
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="px-3 py-1 border border-gray-200 dark:border-gray-700 rounded-md text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => setCurrentPage(p => Math.max(1, Math.min(p, Math.max(totalPages, 1)) - 1))}
+              disabled={safeCurrentPage === 1}
+              className="px-3 py-1 border border-gray-200 dark:border-gray-700 rounded-md text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex-1 sm:flex-none"
             >
               Anterior
             </button>
             <button 
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages || totalPages === 0}
-              className="px-3 py-1 border border-gray-200 dark:border-gray-700 rounded-md text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => setCurrentPage(p => Math.min(Math.max(totalPages, 1), Math.max(1, p) + 1))}
+              disabled={safeCurrentPage === totalPages || totalPages === 0}
+              className="px-3 py-1 border border-gray-200 dark:border-gray-700 rounded-md text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex-1 sm:flex-none"
             >
               Próxima
             </button>
@@ -369,7 +371,7 @@ export default function Students() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 rounded-lg bg-gray-50 dark:bg-[#12141a] border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-1">
                   <BookOpen className="w-4 h-4" /> Curso

@@ -46,7 +46,7 @@ export default function Courses() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {courses.map((course: Course, idx: number) => (
-          <Card key={course.id} delay={idx * 0.1} className="p-6">
+          <Card key={course.id} delay={idx * 0.1} className="p-4 sm:p-5 md:p-6">
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{course.name}</h3>
@@ -60,7 +60,7 @@ export default function Courses() {
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div className="p-4 rounded-lg bg-gray-50 dark:bg-[#12141a] border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-1">
                   <Users className="w-4 h-4" /> Alunos
@@ -90,7 +90,7 @@ export default function Courses() {
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button 
                 onClick={() => setSelectedCourse(course)}
                 className="flex-1 px-4 py-2 text-white rounded-lg text-sm font-medium transition-colors shadow-sm hover:opacity-90"
@@ -100,7 +100,7 @@ export default function Courses() {
               </button>
               <button 
                 onClick={() => handleExportCourseReport(course)}
-                className="px-4 py-2 bg-white dark:bg-[#1a1c23] border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm flex items-center gap-2"
+                className="px-4 py-2 bg-white dark:bg-[#1a1c23] border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm flex items-center justify-center gap-2"
               >
                 <Download className="w-4 h-4" />
                 Relatório
@@ -124,7 +124,7 @@ export default function Courses() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 rounded-lg bg-gray-50 dark:bg-[#12141a] border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-1">
                   <Users className="w-4 h-4" /> Total de Alunos

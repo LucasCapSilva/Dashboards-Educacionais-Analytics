@@ -34,8 +34,8 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
                 className
               )}
             >
-              <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h2>
+              <div className="flex items-center justify-between p-4 sm:p-5 md:p-6 border-b border-gray-100 dark:border-gray-800 gap-3">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white break-words">{title}</h2>
                 <button
                   onClick={onClose}
                   className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
@@ -43,7 +43,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <div className="p-6 overflow-y-auto">
+              <div className="p-4 sm:p-5 md:p-6 overflow-y-auto">
                 {children}
               </div>
             </div>

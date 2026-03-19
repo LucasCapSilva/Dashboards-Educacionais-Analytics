@@ -57,7 +57,7 @@ export default function Settings() {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Logotipo
               </label>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
                 <div className="w-24 h-24 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center bg-gray-50 dark:bg-[#12141a] overflow-hidden">
                   {logoUrl ? (
                     <img src={logoUrl} alt="Logo" className="max-w-full max-h-full object-contain p-2" />
@@ -65,8 +65,8 @@ export default function Settings() {
                     <Building2 className="w-8 h-8 text-gray-400" />
                   )}
                 </div>
-                <div>
-                  <label className="cursor-pointer px-4 py-2 bg-white dark:bg-[#1a1c23] border border-gray-200 dark:border-gray-800 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm flex items-center gap-2 w-fit">
+                <div className="w-full sm:w-auto">
+                  <label className="cursor-pointer px-4 py-2 bg-white dark:bg-[#1a1c23] border border-gray-200 dark:border-gray-800 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm inline-flex items-center justify-center gap-2 w-full sm:w-fit">
                     <Upload className="w-4 h-4" />
                     Fazer Upload
                     <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} />
@@ -129,7 +129,7 @@ export default function Settings() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Aparência</h3>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch gap-4">
             <button
               onClick={() => themeMode !== 'light' && toggleTheme()}
               className={cn(
@@ -167,7 +167,7 @@ export default function Settings() {
         <div className="flex justify-end pt-4">
           <button
             onClick={handleSave}
-            className="px-6 py-2.5 text-white rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2 hover:opacity-90"
+            className="px-6 py-2.5 text-white rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center justify-center gap-2 hover:opacity-90 w-full sm:w-auto"
             style={{ backgroundColor: colors[500] }}
           >
             {isSaved ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}

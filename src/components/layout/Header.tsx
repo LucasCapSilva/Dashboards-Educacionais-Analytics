@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bell, Search, Sun, Moon, BookOpen } from 'lucide-react';
+import { Bell, Search, Sun, Moon, BookOpen, Menu } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 import { useDataStore } from '../../store/dataStore';
 import { useNavigate } from 'react-router-dom';
 
-export const Header = () => {
+interface HeaderProps {
+  onOpenMobileSidebar: () => void;
+}
+
+export const Header = ({ onOpenMobileSidebar }: HeaderProps) => {
   const { themeMode, toggleTheme, colors } = useThemeStore();
   const { students, courses, setGlobalSearchTerm } = useDataStore();
   const navigate = useNavigate();
@@ -59,8 +63,15 @@ export const Header = () => {
   };
 
   return (
-    <header className="h-16 px-6 bg-white/80 dark:bg-[#12141a]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/5 flex items-center justify-between sticky top-0 z-50">
-      <div className="flex items-center gap-4 flex-1">
+    <header className="h-16 px-4 sm:px-5 md:px-6 bg-white/80 dark:bg-[#12141a]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/5 flex items-center justify-between sticky top-0 z-50">
+      <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+        <button
+          onClick={onOpenMobileSidebar}
+          className="lg:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 transition-colors"
+          aria-label="Abrir menu lateral"
+        >
+          <Menu size={20} />
+        </button>
         <div className="relative max-w-md w-full hidden md:block" ref={dropdownRef}>
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input 
@@ -135,7 +146,7 @@ export const Header = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-3 md:gap-4 pl-2">
         <button 
           onClick={toggleTheme}
           className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 transition-colors"
@@ -149,9 +160,9 @@ export const Header = () => {
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-[#12141a]"></span>
         </button>
 
-        <div className="h-8 w-px bg-gray-200 dark:bg-white/10 mx-2"></div>
+        <div className="h-8 w-px bg-gray-200 dark:bg-white/10 mx-1 hidden sm:block"></div>
 
-        <button className="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-white/5 py-1.5 px-3 rounded-lg transition-colors">
+        <button className="flex items-center gap-2 sm:gap-3 hover:bg-gray-50 dark:hover:bg-white/5 py-1.5 px-2 sm:px-3 rounded-lg transition-colors">
           <div className="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-500/20 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-sm">
             AD
           </div>

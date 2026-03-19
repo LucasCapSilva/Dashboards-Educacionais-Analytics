@@ -10,6 +10,8 @@ import {
   BarChart, Bar, PieChart, Pie, Cell, Legend
 } from 'recharts';
 
+const pieColors = ['#3B82F6', '#10B981', '#EF4444'];
+
 export default function Dashboard() {
   const { colors, themeMode } = useThemeStore();
   const { students, courses } = useDataStore();
@@ -27,8 +29,6 @@ export default function Dashboard() {
     <GraduationCap className="w-5 h-5" />,
     <BookOpen className="w-5 h-5" />
   ];
-
-  const pieColors = ['#3B82F6', '#10B981', '#EF4444'];
 
   const statusDistributionData = useMemo(() => [
     { name: 'Ativos', value: students.filter(s => s.status === 'ativo').length, color: pieColors[0] },
@@ -80,7 +80,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard Geral</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">Visão geral do desempenho e engajamento do bootcamp.</p>
@@ -105,7 +105,7 @@ export default function Dashboard() {
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Line Chart - Evolução */}
-        <Card delay={0.4} className="lg:col-span-2 p-6">
+        <Card delay={0.4} className="lg:col-span-2 p-4 sm:p-5 md:p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Evolução de Alunos</h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -127,7 +127,7 @@ export default function Dashboard() {
         </Card>
 
         {/* Pie Chart - Status */}
-        <Card delay={0.5} className="p-6">
+        <Card delay={0.5} className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Distribuição de Status</h3>
           <div className="h-[300px] w-full flex items-center justify-center relative">
             <ResponsiveContainer width="100%" height="100%">
@@ -160,7 +160,7 @@ export default function Dashboard() {
               <span className="text-xs text-gray-500 dark:text-gray-400">Total</span>
             </div>
           </div>
-          <div className="flex justify-center gap-4 mt-2">
+          <div className="flex justify-center gap-3 sm:gap-4 mt-2 flex-wrap">
             {statusDistributionData.map((item, index) => (
               <div key={item.name} className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                 <span className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: pieColors[index] }}></span>
@@ -173,7 +173,7 @@ export default function Dashboard() {
 
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card delay={0.6} className="p-6">
+        <Card delay={0.6} className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Performance por Turma (Notas)</h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -191,7 +191,7 @@ export default function Dashboard() {
           </div>
         </Card>
 
-        <Card delay={0.7} className="p-6">
+        <Card delay={0.7} className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Engajamento por Turma</h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">

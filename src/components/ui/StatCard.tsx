@@ -17,7 +17,7 @@ export function StatCard({ title, value, change, trend, icon, delay = 0 }: StatC
   const { colors } = useThemeStore();
 
   return (
-    <Card delay={delay} className="p-6 flex flex-col justify-between relative overflow-hidden">
+    <Card delay={delay} className="p-4 sm:p-5 md:p-6 flex flex-col justify-between relative overflow-hidden">
       <div className="flex justify-between items-start mb-4">
         <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{title}</h3>
         {icon && (
@@ -30,9 +30,9 @@ export function StatCard({ title, value, change, trend, icon, delay = 0 }: StatC
         )}
       </div>
       
-      <div className="flex items-end justify-between">
+      <div className="flex items-end justify-between gap-3">
         <div>
-          <span className="text-3xl font-bold text-gray-900 dark:text-white">{value}</span>
+          <span className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white break-words">{value}</span>
         </div>
         
         {change !== undefined && trend && (

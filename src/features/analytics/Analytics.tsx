@@ -7,6 +7,9 @@ import {
   Area, ComposedChart, Line
 } from 'recharts';
 
+const days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+const hours = ['08h', '10h', '12h', '14h', '16h', '18h', '20h', '22h'];
+
 export default function Analytics() {
   const { colors, themeMode } = useThemeStore();
   const { students } = useDataStore();
@@ -37,21 +40,21 @@ export default function Analytics() {
   ];
 
   // Simulating a heatmap with scatter chart
-  const days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-  const hours = ['08h', '10h', '12h', '14h', '16h', '18h', '20h', '22h'];
-  
-  const heatmapData = [];
-  for (let i = 0; i < days.length; i++) {
-    for (let j = 0; j < hours.length; j++) {
-      heatmapData.push({
-        day: i,
-        hour: j,
-        value: Math.floor(Math.random() * 100),
-        dayName: days[i],
-        hourName: hours[j]
-      });
+  const heatmapData = useMemo(() => {
+    const data = [];
+    for (let i = 0; i < days.length; i++) {
+      for (let j = 0; j < hours.length; j++) {
+        data.push({
+          day: i,
+          hour: j,
+          value: ((i + 1) * (j + 3) * 17 + students.length * 11) % 100,
+          dayName: days[i],
+          hourName: hours[j]
+        });
+      }
     }
-  }
+    return data;
+  }, [students.length]);
 
   return (
     <div className="space-y-6">
@@ -62,10 +65,10 @@ export default function Analytics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Correlation Chart */}
-        <Card delay={0.1} className="p-6">
+        <Card delay={0.1} className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Engajamento vs. Notas</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Correlação entre o nível de engajamento do aluno e sua nota final.</p>
-          <div className="h-[350px] w-full">
+          <div className="h-[300px] sm:h-[320px] md:h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: -10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
@@ -83,10 +86,10 @@ export default function Analytics() {
         </Card>
 
         {/* Learning Evolution */}
-        <Card delay={0.2} className="p-6">
+        <Card delay={0.2} className="p-4 sm:p-5 md:p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Evolução de Aprendizado</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Comparação do ritmo de progresso atual versus o esperado.</p>
-          <div className="h-[350px] w-full">
+          <div className="h-[300px] sm:h-[320px] md:h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={learningEvolutionData} margin={{ top: 10, right: 20, bottom: 20, left: -10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
@@ -105,10 +108,10 @@ export default function Analytics() {
       </div>
 
       {/* Heatmap (simulated with Scatter) */}
-      <Card delay={0.3} className="p-6">
+      <Card delay={0.3} className="p-4 sm:p-5 md:p-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Heatmap de Participação (Horários de Pico)</h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Dias e horários com maior volume de acesso e resolução de exercícios.</p>
-        <div className="h-[400px] w-full">
+        <div className="h-[320px] sm:h-[360px] md:h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
               <XAxis 
