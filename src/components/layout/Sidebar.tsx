@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
+  House, 
+  CircleUserRound,
   LayoutDashboard, 
   Users, 
   BookOpen, 
@@ -15,7 +17,9 @@ import { useThemeStore } from '../../store/themeStore';
 import clsx from 'clsx';
 
 const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
+  { icon: House, label: 'Home', path: '/' },
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+  { icon: CircleUserRound, label: 'Sobre', path: '/about' },
   { icon: Users, label: 'Alunos', path: '/students' },
   { icon: BookOpen, label: 'Turmas & Cursos', path: '/courses' },
   { icon: LineChart, label: 'Analytics', path: '/analytics' },

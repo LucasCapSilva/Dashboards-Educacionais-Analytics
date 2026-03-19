@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { MainLayout } from './components/layout/MainLayout';
 
 const Dashboard = lazy(() => import('./features/dashboard/Dashboard'));
+const Home = lazy(() => import('./features/home/Home'));
+const About = lazy(() => import('./features/about/About'));
 const Students = lazy(() => import('./features/students/Students'));
 const Courses = lazy(() => import('./features/courses/Courses'));
 const Analytics = lazy(() => import('./features/analytics/Analytics'));
@@ -20,7 +22,9 @@ function App() {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<Dashboard />} />
+            <Route index element={<Home />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="about" element={<About />} />
             <Route path="students" element={<Students />} />
             <Route path="courses" element={<Courses />} />
             <Route path="analytics" element={<Analytics />} />
