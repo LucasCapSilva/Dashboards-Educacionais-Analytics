@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { ArrowRight, BookOpenText, Building2, ChartColumnIncreasing, GraduationCap, Mail, PhoneCall, Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpenText, Building2, ChartColumnIncreasing, GraduationCap, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const learningTrend = [
@@ -128,7 +128,7 @@ export default function Home() {
                 to="/about"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-5 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-white/5"
               >
-                Conhecer especialista
+                Conhecer a solução
               </Link>
             </div>
           </motion.div>
@@ -223,7 +223,7 @@ export default function Home() {
             to="/about"
             className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800 dark:bg-brand-600 dark:hover:bg-brand-700"
           >
-            Ver perfil profissional
+            Ver apresentação técnica
           </Link>
         </motion.article>
       </section>
@@ -232,17 +232,10 @@ export default function Home() {
         <div className="flex flex-col gap-4 text-sm text-gray-600 dark:text-gray-300 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-semibold text-gray-900 dark:text-white">Dashboards Educacionais Analytics</p>
-            <p className="mt-1 inline-flex items-center gap-2">
-              <Mail size={14} />
-              contato@analyticseducacional.com.br
-            </p>
+            <p className="mt-1">Plataforma demonstrativa para gestão acadêmica orientada por dados.</p>
           </div>
           <div>
-            <p className="inline-flex items-center gap-2">
-              <PhoneCall size={14} />
-              +55 (11) 4002-7788
-            </p>
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Av. Paulista, 1200 · São Paulo, SP</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Ambiente de demonstração para apresentação de funcionalidades.</p>
           </div>
           <div className="inline-flex items-center gap-2 rounded-lg bg-brand-50 px-3 py-2 text-xs font-medium text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">
             <BookOpenText size={14} />
