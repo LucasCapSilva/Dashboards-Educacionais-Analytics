@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bell, Search, Sun, Moon, BookOpen, Menu } from 'lucide-react';
+import { Bell, Search, Sun, Moon, BookOpen, Menu, Github } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 import { useDataStore } from '../../store/dataStore';
 import { useNavigate } from 'react-router-dom';
@@ -147,6 +147,16 @@ export const Header = ({ onOpenMobileSidebar }: HeaderProps) => {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3 md:gap-4 pl-2">
+        <a
+          href="https://github.com/LucasCapSilva/DashboardsEducacionais-Analytics"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 transition-colors"
+          aria-label="Acessar repositório no GitHub"
+        >
+          <Github size={20} />
+        </a>
+
         <button 
           onClick={toggleTheme}
           className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 transition-colors"
